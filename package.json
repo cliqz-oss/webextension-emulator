@@ -1,0 +1,28 @@
+{
+  "name": "@cliqz/webextension-emulator",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/index.js",
+  "files": [
+    "src/**"
+  ],
+  "dependencies": {
+    "atob": "^2.1.2",
+    "blob": "0.0.5",
+    "btoa": "^1.2.1",
+    "filereader": "^0.10.3",
+    "indexeddbshim": "^4.1.0",
+    "node-fetch": "^2.3.0",
+    "node-webcrypto-ossl": "^1.0.39",
+    "webextension-polyfill": "^0.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.18",
+    "typescript": "^3.2.2"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "MIT"
+}
