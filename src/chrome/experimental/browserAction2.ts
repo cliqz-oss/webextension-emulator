@@ -1,4 +1,7 @@
 
 export default {
-  create() {}
+  create() {},
+  setBadgeText() {},
+  setIcon() {},
+  setBadgeBackgroundColor() {},
 }

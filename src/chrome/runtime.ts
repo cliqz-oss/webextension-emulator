@@ -8,10 +8,13 @@ function loadManifest(EXTENSION_DIR) {
   }));
 }
 
-export default (EXTENSION_DIR: string) => ({
+export default (EXTENSION_DIR: string, probe?: (key: string, value: any) => void) => ({
   manifest: loadManifest(EXTENSION_DIR),
   connect() {
     return {
+      postMessage(message) {
+        probe && probe('chrome.runtime.postMessage', message.action);
+      },
       onMessage: new EventSource('runtime.connect().onMessage'),
     }
   },
@@ -23,5 +26,6 @@ export default (EXTENSION_DIR: string) => ({
   },
   onMessage: new EventSource('runtime.onMessage'),
   onConnect: new EventSource('runtime.onConnect'),
+  onInstalled: new EventSource('runtime.onInstalled'),
   onMessageExternal: new EventSource('runtime.onMessageExternal'),
 });

@@ -37,11 +37,16 @@ export default class WebExtensionEmulator {
     this.extensionBaseDir = extensionBaseDir;
     this.options = Object.assign({}, DEFAULT_CONFIG, options);
     this.probes = {};
+    const probeFn = this.options.probe || this._probe.bind(this);
 
-    this.chrome = createChrome(this.extensionBaseDir, this.options.chromeStoragePath);
+    this.chrome = createChrome({
+      extensionDir: this.extensionBaseDir,
+      storageDir: this.options.chromeStoragePath,
+      probe: probeFn,
+    });
     this.window = createWindow({
       fetchBaseDirectory: this.extensionBaseDir,
-      probe: this.options.probe || this._probe.bind(this),
+      probe: probeFn,
       ...options,
     });
     this.window.chrome = this.chrome;

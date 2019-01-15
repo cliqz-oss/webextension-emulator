@@ -56,7 +56,7 @@ export default (basepath: string, probe?: (key: string, value: any) => void) => 
           method: this.method,
           credentials: this.withCredentials ? 'include' : 'omit',
           body,
-        }).then((resp) => {
+        }).then((resp: Response) => {
           this.status = resp.status;
           this.statusText = resp.statusText;
           this.responseUrl = resp.url;
@@ -71,8 +71,11 @@ export default (basepath: string, probe?: (key: string, value: any) => void) => 
               this.response = buff;
             } else if (this.responseType === 'json') {
               this.response = JSON.parse(this.responseText);
-            } else {
+            } else if (!resp.headers.has('Content-Type') ||
+                !resp.headers.get('Content-Type').startsWith('application/json')) {
               this.response = buff;
+            } else {
+              this.response = this.responseText;
             }
             this.onload && this.onload();
             probe && probe('xmlhttprequest.remote.size', buff.byteLength);

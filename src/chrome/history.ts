@@ -21,4 +21,5 @@ export default {
   },
   onVisited: new EventSource('history.onVisited'),
   onVisitRemoved: new EventSource('history.onVisitRemoved'),
+  onTitleChanged: new EventSource('history.onTitleChanged'),
 }

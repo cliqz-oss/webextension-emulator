@@ -30,6 +30,7 @@ function createConsole(quiet: boolean) {
       error: noop,
       info: noop,
       debug: noop,
+      trace: noop,
     }
   }
 }
