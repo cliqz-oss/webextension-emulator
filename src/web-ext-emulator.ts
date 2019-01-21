@@ -189,4 +189,18 @@ export default class WebExtensionEmulator {
     });
   }
 
+  getProbeSummary() {
+    const get = (key: string) => this.probes[key] || [];
+    const sum = (a: number, b: number): number => a + b;
+    return {
+      memory: Math.max(...get('memory.heap')),
+      httpRequests: get('xmlhttprequest.remote.url').length + get('fetch.remote.url').length,
+      networkData: get('xmlhttprequest.remote.size').reduce(sum, 0) + get('fetch.remote.size').reduce(sum, 0),
+      contentMessages: get('chrome.tabs.message').length + get('chrome.tabs.postMessage').length + get('chrome.runtime.postMessage').length,
+      runtimeMessagesResponded: get('chrome.runtime.onMessage').length,
+      storage: get('storage.local.size')[0],
+      storageWrites: get('storage.local.writes')[0],
+    }
+  }
+
 }
