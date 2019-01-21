@@ -24,6 +24,13 @@ export default (EXTENSION_DIR: string, probe?: (key: string, value: any) => void
   getURL(file) {
     return join(EXTENSION_DIR, file);
   },
+  sendMessage(extensionOrMessage) {
+    if (typeof extensionOrMessage === 'string') {
+      probe && probe('chrome.runtime.sendMessage', extensionOrMessage);
+    } else {
+      probe && probe('chrome.runtime.sendMessage', extensionOrMessage.action);
+    }
+  },
   onMessage: new EventSource('runtime.onMessage'),
   onConnect: new EventSource('runtime.onConnect'),
   onInstalled: new EventSource('runtime.onInstalled'),
