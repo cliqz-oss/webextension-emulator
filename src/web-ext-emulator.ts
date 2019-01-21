@@ -1,6 +1,7 @@
-import { existsSync, mkdirSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, createReadStream } from 'fs';
 import { createContext, runInContext } from 'vm';
 import { join } from 'path';
+import { createInterface } from 'readline';
 import * as setGlobalVars from 'indexeddbshim';
 import createChrome from './chrome';
 import createWindow, { WindowConfig } from './window'
@@ -122,6 +123,70 @@ export default class WebExtensionEmulator {
     this._probe('storage.local.size', this.chrome.storage.local.size());
     this._probe('storage.local.writes', this.chrome.storage.local.writes);
     this._probe('storage.sync.size', this.chrome.storage.sync.size());
+  }
+
+  emulateSession(sessionFile: string, filterApis?: Set<string>): Promise<void> {
+    return new Promise((resolve) => {
+      const start = Date.now();
+      let firstTs = null;
+      const lineReader = createInterface({
+        input: createReadStream(sessionFile),
+      });
+      let tick: Promise<{}> = Promise.resolve({});
+      lineReader.on('line', (line) => {
+        const { api, event, args, ts } = JSON.parse(line);
+        if (!firstTs) {
+          firstTs = ts;
+        }
+        // console.log(api, event, args);
+        if (!this.chrome[api]) {
+          console.error('api missing', api)
+          return;
+        }
+        if (!this.chrome[api][event]) {
+          console.error('event missing', api, event);
+          return
+        }
+        if (filterApis && filterApis.has(api)) {
+          return;
+        } else if (api === 'runtime') {
+          if (event === 'onConnect') {
+            const port = Object.assign(args[0], this.chrome.runtime.connect());
+            args[0] = port;
+          } else if (event === 'onMessage') {
+            // add respond function
+            args[2] = () => {
+              this._probe('chrome.runtime.onMessage', `${args[0].module}.${args[0].action}`);
+            };
+          }
+        }
+        tick = tick.then(() => {
+          const virtualElapsed = ts - firstTs;
+          const actualElapsed = Date.now() - start;
+          const runEventAt = virtualElapsed / this.options.timeMultiplier;
+          const nextEventIn = runEventAt - actualElapsed;
+          if (nextEventIn < 1) {
+            this.chrome[api][event].trigger(...args);
+          } else {
+            return new Promise((resolve) => {
+              setTimeout(() => {
+                try {
+                  this.chrome[api][event].trigger(...args);
+                } catch (e) {
+                  console.error(e);
+                }
+                resolve();
+              }, nextEventIn);
+            });
+          }
+        });
+      });
+      lineReader.on('close', () => {
+        tick.then(() => {
+          resolve();
+        });
+      });
+    });
   }
 
 }
