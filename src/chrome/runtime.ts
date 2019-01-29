@@ -31,6 +31,7 @@ export default (EXTENSION_DIR: string, probe?: (key: string, value: any) => void
       probe && probe('chrome.runtime.sendMessage', extensionOrMessage.action);
     }
   },
+  setUninstallURL() {},
   onMessage: new EventSource('runtime.onMessage'),
   onConnect: new EventSource('runtime.onConnect'),
   onInstalled: new EventSource('runtime.onInstalled'),
