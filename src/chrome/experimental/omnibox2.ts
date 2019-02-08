@@ -10,6 +10,7 @@ export default {
   override() {
   },
   setPlaceholder() {},
+  updateMany() {},
   urlbarAction: {
     onClicked: new EventSource('omnibox2.urlbarAction.onClicked'),
   },

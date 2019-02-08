@@ -1,6 +1,6 @@
 import EventSource from '../event-source';
 
-type Tab = {
+export type Tab = {
   active: boolean
   attention?: boolean
   audible?: boolean

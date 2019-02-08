@@ -46,7 +46,8 @@ export default (basepath: string, probe?: (key: string, value: any) => void) => 
             return this.onerror && this.onerror();
           }
           this.responseText = data.toString();
-          this.status = 200;
+          this.response = data.toString();
+          this.status = 0;
           this.onload();
           probe && probe('xmlhttprequest.local.size', this.responseText.length);
         });
