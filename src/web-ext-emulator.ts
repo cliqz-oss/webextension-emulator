@@ -5,6 +5,7 @@ import { createInterface } from 'readline';
 import * as setGlobalVars from 'indexeddbshim';
 import createChrome from './chrome';
 import createWindow, { WindowConfig } from './window'
+import MockBrowser from './mock-browser'
 
 export interface EmulatorConfig extends WindowConfig {
   injectWebextenionPolyfill?: boolean
@@ -33,6 +34,7 @@ export default class WebExtensionEmulator {
   chrome: Global
   window: Global
   sandbox: Global
+  mock: MockBrowser
 
   constructor(extensionBaseDir: string, options: EmulatorConfig) {
     this.extensionBaseDir = extensionBaseDir;
@@ -52,6 +54,7 @@ export default class WebExtensionEmulator {
     });
     this.window.chrome = this.chrome;
     this.window.browser = this.chrome;
+    this.mock = new MockBrowser(this.window, this.chrome);
   }
 
   addChromeApi(name, value) {
