@@ -3,8 +3,6 @@ import * as FileReader from 'filereader';
 import * as WebCrypto from 'node-webcrypto-ossl';
 import * as btoa from 'btoa';
 import * as atob from 'atob';
-import * as indexedDB from 'fake-indexeddb';
-import * as IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange';
 
 import Blob from './blob';
 import navigator from './navigator';
@@ -62,8 +60,6 @@ export default (config: WindowConfig) => ({
   Date: createDate(config.initialTime || Date.now(), config.timeMultiplier),
   Worker,
   XMLHttpRequest: XMLHttpRequestFactory(config.fetchBaseDirectory, config.probe),
-  indexedDB,
-  IDBKeyRange,
   // globals
   console: createConsole(config.quiet),
   navigator,

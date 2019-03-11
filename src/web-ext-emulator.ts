@@ -3,6 +3,8 @@ import { createContext, runInContext } from 'vm';
 import { join } from 'path';
 import { createInterface } from 'readline';
 import * as setGlobalVars from 'indexeddbshim';
+import * as indexedDB from 'fake-indexeddb';
+import * as IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange';
 import createChrome from './chrome';
 import createWindow, { WindowConfig } from './window'
 import MockBrowser from './mock-browser'
@@ -84,6 +86,9 @@ export default class WebExtensionEmulator {
         databaseBasePath: this.options.indexedDBPath,
         replaceNonIDBGlobals: true,
       });
+    } else {
+      sandbox.indexedDB = indexedDB;
+      sandbox.IDBKeyRange = IDBKeyRange;
     }
     createContext(sandbox);
     this.sandbox = sandbox;
