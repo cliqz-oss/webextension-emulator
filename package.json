@@ -10,6 +10,7 @@
     "atob": "^2.1.2",
     "blob": "0.0.5",
     "btoa": "^1.2.1",
+    "fake-indexeddb": "^2.0.5",
     "filereader": "^0.10.3",
     "indexeddbshim": "^4.1.0",
     "node-fetch": "^2.3.0",

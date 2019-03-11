@@ -75,14 +75,16 @@ export default class WebExtensionEmulator {
       ...this.window
     };
     // create mock Indexeddb
-    if (!existsSync(this.options.indexedDBPath)) {
-      mkdirSync(this.options.indexedDBPath);
+    if (this.options.indexedDBPath) {
+      if (!existsSync(this.options.indexedDBPath)) {
+        mkdirSync(this.options.indexedDBPath);
+      }
+      setGlobalVars(sandbox, {
+        checkOrigin: false,
+        databaseBasePath: this.options.indexedDBPath,
+        replaceNonIDBGlobals: true,
+      });
     }
-    setGlobalVars(sandbox, {
-      checkOrigin: false,
-      databaseBasePath: this.options.indexedDBPath,
-      replaceNonIDBGlobals: true,
-    });
     createContext(sandbox);
     this.sandbox = sandbox;
 
