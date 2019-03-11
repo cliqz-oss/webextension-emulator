@@ -15,6 +15,7 @@ import pageAction from './pageAction';
 import topSites from './topSites';
 import management from './management';
 import windows from './windows';
+import createPermissions from './permissions';
 
 export interface ChromeConfig {
   extensionDir: string
@@ -22,22 +23,26 @@ export interface ChromeConfig {
   probe?: (key: string, value: any) => void
 }
 
-export default (config: ChromeConfig) => ({
-  runtime: createRuntime(config.extensionDir, config.probe),
-  browserAction,
-  commands,
-  cookies,
-  contentScripts,
-  contextMenus,
-  extension,
-  history,
-  i18n,
-  management,
-  pageAction,
-  tabs: createTabs(config.probe),
-  topSites,
-  storage: createStorage(config.storageDir),
-  webNavigation,
-  webRequest,
-  windows,
-});
+export default (config: ChromeConfig) => {
+  const runtime = createRuntime(config.extensionDir, config.probe);
+  return {
+    runtime,
+    browserAction,
+    commands,
+    cookies,
+    contentScripts,
+    contextMenus,
+    extension,
+    history,
+    i18n,
+    management,
+    pageAction,
+    permissions: createPermissions(runtime),
+    tabs: createTabs(config.probe),
+    topSites,
+    storage: createStorage(config.storageDir),
+    webNavigation,
+    webRequest,
+    windows,
+  }
+};
