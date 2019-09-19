@@ -3,6 +3,7 @@ import * as FileReader from 'filereader';
 import * as WebCrypto from 'node-webcrypto-ossl';
 import * as btoa from 'btoa';
 import * as atob from 'atob';
+import { performance } from 'perf_hooks';
 
 import Blob from './blob';
 import navigator from './navigator';
@@ -63,6 +64,7 @@ export default (config: WindowConfig) => ({
   // globals
   console: createConsole(config.quiet),
   navigator,
+  performance,
   // timers
   ...createTimers(config.timeMultiplier),
   // utility
