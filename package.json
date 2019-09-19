@@ -22,7 +22,8 @@
     "typescript": "^3.2.2"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "npm run build"
   },
   "author": "",
   "license": "MIT"
