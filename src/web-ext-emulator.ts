@@ -55,7 +55,6 @@ export default class WebExtensionEmulator {
       ...options,
     });
     this.window.chrome = this.chrome;
-    this.window.browser = this.chrome;
     this.mock = new MockBrowser(this.window, this.chrome);
   }
 
