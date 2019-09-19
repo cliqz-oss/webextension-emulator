@@ -85,5 +85,9 @@ export default (basepath: string, probe?: (key: string, value: any) => void) => 
         probe && probe('xmlhttprequest.remote.url', this.url);
       }
     }
+
+    abort() {
+      // noop
+    }
   }
 }
