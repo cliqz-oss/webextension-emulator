@@ -34,7 +34,9 @@ class StorageArea {
     this.writes = 0;
   }
   _keyReducer(acc, key) {
-    acc[key] = this.storage[key];
+    if (this.storage[key] !== undefined) {
+      acc[key] = this.storage[key];
+    }
     return acc;
   }
   get(keys: string | string[] | object, cb) {
@@ -42,7 +44,7 @@ class StorageArea {
     if (!keys) {
       cb(Object.assign({}, this.storage));
     } else if (typeof keys === 'string') {
-      cb({ [keys]: this.storage[keys] });
+      cb(this._keyReducer({}, keys));
     } else if (Array.isArray(keys)) {
       const result = keys.reduce(this._keyReducer.bind(this), {});
       cb(result);
@@ -53,17 +55,18 @@ class StorageArea {
   set(keys: object, cb) {
     this.writes += 1;
     Object.keys(keys).forEach((k) => {
+      this.storage[k] = keys[k];
       onChanged.trigger(new StorageChange(this.storage[k], keys[k]), this.areaName);
     });
-    Object.assign(this.storage, keys);
     cb && cb();
     writeFileSync(this.fileName, JSON.stringify(this.storage));
   }
   remove(keys: string | string[], cb) {
+    this.writes += 1;
     if (typeof keys === 'string') {
-      this.storage[keys] = undefined;
+      delete this.storage[keys];
     } else {
-      keys.forEach((k) => this.storage[k] = undefined);
+      keys.forEach((k) => delete this.storage[k]);
     }
     cb && cb();
   }
