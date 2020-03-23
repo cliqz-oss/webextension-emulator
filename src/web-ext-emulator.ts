@@ -10,6 +10,7 @@ import createWindow, { WindowConfig } from './window'
 import MockBrowser from './mock-browser'
 
 export interface EmulatorConfig extends WindowConfig {
+  extensionId?: string
   injectWebextenionPolyfill?: boolean
   chromeStoragePath?: string
   indexedDBPath?: string
@@ -45,6 +46,7 @@ export default class WebExtensionEmulator {
     const probeFn = this.options.probe || this._probe.bind(this);
 
     this.chrome = createChrome({
+      extensionId: this.options.extensionId,
       extensionDir: this.extensionBaseDir,
       storageDir: this.options.chromeStoragePath,
       probe: probeFn,

@@ -20,11 +20,15 @@ import createPermissions from './permissions';
 export interface ChromeConfig {
   extensionDir: string
   storageDir: string
+  extensionId?: string
   probe?: (key: string, value: any) => void
 }
 
 export default (config: ChromeConfig) => {
-  const runtime = createRuntime(config.extensionDir, config.probe);
+  const runtime = createRuntime(config.extensionDir, {
+    probe: config.probe,
+    extensionId: config.extensionId
+  });
   return {
     runtime,
     browserAction,
