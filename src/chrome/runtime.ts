@@ -16,10 +16,10 @@ function loadManifest(EXTENSION_DIR) {
 export default (EXTENSION_DIR: string, options: CreateRuntimeOptions) => {
   const manifest = loadManifest(EXTENSION_DIR);
   const { extensionId, probe } = options;
-  const id = extensionId || (
-    manifest.browser_specific_settings &&
-    manifest.browser_specific_settings.gecko &&
-    manifest.browser_specific_settings.gecko.id
+  const id = (
+    extensionId ||
+    manifest?.browser_specific_settings?.gecko?.id ||
+    manifest?.applications?.gecko?.id
   );
   return {
     id,
