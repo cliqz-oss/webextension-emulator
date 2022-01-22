@@ -13,7 +13,7 @@
     "fake-indexeddb": "^2.0.5",
     "filereader": "^0.10.3",
     "indexeddbshim": "^4.1.0",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^3.1.1",
     "node-webcrypto-ossl": "^1.0.44",
     "webextension-polyfill": "^0.3.1"
   },
